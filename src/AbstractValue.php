@@ -9,7 +9,6 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
 {
     /**
      * @psalm-var TValue
-     * @phpstan-var TValue
      *
      * @var mixed
      */
@@ -17,7 +16,6 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
 
     /**
      * @psalm-param TValue $value
-     * @phpstan-param TValue $value
      *
      * @param mixed $value
      */
@@ -30,7 +28,6 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
 
     /**
      * @psalm-return TValue
-     * @phpstan-return TValue
      *
      * {@inheritDoc}
      */
@@ -58,10 +55,8 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
 
     /**
      * @psalm-param TValue $value
-     * @phpstan-param TValue $value
      *
      * @psalm-return TValue
-     * @phpstan-return TValue
      *
      * @return mixed
      */
