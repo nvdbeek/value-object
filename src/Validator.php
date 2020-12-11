@@ -9,6 +9,8 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use function Safe\sprintf;
+
 final class Validator
 {
     /**
@@ -22,7 +24,7 @@ final class Validator
     public static function validateBy(ValidatableInterface $validatable): void
     {
         $constraints = $validatable::getConstraints();
-        $callbackConstraints = array_filter($constraints, static function (Constraint $constraint, $key) use (&$constraints) {
+        $callbackConstraints = array_filter($constraints, static function (Constraint $constraint, $key) use (&$constraints): bool {
             if ($constraint instanceof Callback) {
                 unset($constraints[$key]);
 
@@ -32,16 +34,16 @@ final class Validator
             return false;
         }, ARRAY_FILTER_USE_BOTH);
 
-        static::validate($validatable->get(), $constraints);
+        self::validate($validatable->get(), $constraints);
 
-        if (!empty($callbackConstraints)) {
-            static::validate($validatable, $callbackConstraints);
+        if (count($callbackConstraints) > 0) {
+            self::validate($validatable, $callbackConstraints);
         }
     }
 
     /**
-     * @param mixed                   $value
-     * @param Constraint|Constraint[] $rules
+     * @param mixed $value
+     * @param Constraint|Constraint[] $constraints
      *
      * @throws InvalidArgumentException When the value violates any of the given constraints.
      */
@@ -58,15 +60,15 @@ final class Validator
             $violationMessages[] = $violation->getMessage();
         }
 
-        throw new InvalidArgumentException(\sprintf('Invalid value: "%s". "%s"', $value, implode('", "', $violationMessages)));
+        throw new InvalidArgumentException(sprintf('Invalid value: "%s". "%s"', $value, implode('", "', $violationMessages)));
     }
 
     private static function getValidator(): ValidatorInterface
     {
-        if (null === static::$validator) {
-            static::$validator = Validation::createValidator();
+        if (null === self::$validator) {
+            self::$validator = Validation::createValidator();
         }
 
-        return static::$validator;
+        return self::$validator;
     }
 }

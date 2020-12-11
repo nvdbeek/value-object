@@ -2,13 +2,25 @@
 
 namespace Aeviiq\ValueObject;
 
+/**
+ * @template TValue
+ */
 abstract class AbstractValue implements EquatableInterface, ValidatableInterface
 {
     /**
+     * @psalm-var TValue
+     * @phpstan-var TValue
+     *
      * @var mixed
      */
     protected $value;
 
+    /**
+     * @psalm-param TValue $value
+     * @phpstan-param TValue $value
+     *
+     * @param mixed $value
+     */
     public function __construct($value)
     {
         $value = $this->normalize($value);
@@ -17,6 +29,9 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
     }
 
     /**
+     * @psalm-return TValue
+     * @phpstan-return TValue
+     *
      * {@inheritDoc}
      */
     final public function get()
@@ -42,6 +57,12 @@ abstract class AbstractValue implements EquatableInterface, ValidatableInterface
     }
 
     /**
+     * @psalm-param TValue $value
+     * @phpstan-param TValue $value
+     *
+     * @psalm-return TValue
+     * @phpstan-return TValue
+     *
      * @return mixed
      */
     protected function normalize($value)
